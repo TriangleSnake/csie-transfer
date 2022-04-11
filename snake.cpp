@@ -6,7 +6,7 @@
 #include <conio.h>
 #include <time.h>
 using namespace std;
-const int size=25;
+const int size=38;
 const float speed=32;
 string screen[size][size];
 int lng=2;
@@ -32,6 +32,33 @@ void show(){
 	}
 	Sleep(speed);
 }
+void menu(){
+	HideCursor();
+	COORD pos;
+	pos.X=0;
+	pos.Y=size/2-3;
+	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE),pos);
+			string icon=
+"\
+―   .oooooo..o ooooo      ooo       .o.       oooo    oooo oooooooooooo \n\
+―  d8P'    `Y8 `888b.     `8'      .888.      `888   .8P'  `888'     `8 \n\
+―  Y88bo.       8 `88b.    8      .8\"888.      888  d8'     888        \n\
+―   `\"Y8888o.   8   `88b.  8     .8' `888.     88888[       888oooo8   \n\
+―       `\"Y88b  8     `88b.8    .88ooo8888.    888`88b.     888    \"   \n\
+―  oo     .d8P  8       `888   .8'     `888.   888  `88b.   888       o\n\
+―  8\"\"88888P'  o8o        `8  o88o     o8888o o888o  o888o o888ooooood8\
+";
+	while (1){
+		SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE),pos);
+		cout <<icon <<endl;
+		cout <<"―- - - - - - - - - - - - press  ANY  key  to  START - - - - - - - - - - -";
+		Sleep(1000);
+		show();
+		Sleep(1000-speed);
+		if (_kbhit())break;
+	}
+}
+
 struct pos{
 	int x;
 	int y;
@@ -47,7 +74,23 @@ void food(){
 
 vector <struct pos> snake;
 void kill(){
-	cout <<"YOU DIE" <<endl <<"SCORE:" <<lng+1;
+	COORD pos;
+	pos.X=0;
+	pos.Y=size/2-3;
+	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE),pos);
+	cout <<"\
+oooooo   oooo   .oooooo.   ooooo     ooo    oooooooooo.   ooooo oooooooooooo \n\
+ `888.   .8\'   d8P\'  `Y8b  `888\'     `8\'    `888\'   `Y8b  `888\' `888\'     `8 \n\
+  `888. .8\'   888      888  888       8      888      888  888   888         \n\
+   `888.8\'    888      888  888       8      888      888  888   888oooo8    \n\
+    `888\'     888      888  888       8      888      888  888   888    \"    \n\
+     888      `88b    d88\'  `88.    .8\'      888     d88\'  888   888       o \n\
+    o888o      `Y8bood8P\'     `YbodP\'       o888bood8P\'   o888o o888ooooood8 \
+	";
+	pos.X=size;
+	pos.Y=size/2+6;
+	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE),pos);
+	cout <<"SCORE:" <<lng+1;
 	while (1) if (_getch()==27)break;
 	exit(0);
 }
@@ -84,6 +127,8 @@ void update(){
 int main(){
 	keybd_event(16,0,0,0);
 	keybd_event(16,0,KEYEVENTF_KEYUP,0);
+	keybd_event(122,0,0,0);
+	keybd_event(122,0,KEYEVENTF_KEYUP,0);
 	HideCursor();
 	int cmd=int('d');
 	tmp.x=size/2;
@@ -102,6 +147,7 @@ int main(){
 		cout <<endl;
 	}
 	food();
+	menu();
 	while (1){
 		
 		if (cmd==int('w')){
