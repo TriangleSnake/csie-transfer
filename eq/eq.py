@@ -1,5 +1,5 @@
 try:
-    f=open('setting.txt','r')
+    f=open('setting.txt','r',encoding="UTF-8")
     area=f.readline().split('=')[1]
     region=f.readline().split('=')[1]
 except:
