@@ -55,7 +55,8 @@ for i in recieve:
     for j in range(3):
         bot.sendMessage(i,'抵達')
 url='https://script.google.com/macros/s/AKfycbws1z7qKfn834vOqQWKi5Z31U7zrwyQo42BsEScE9doYia15SlHIf82aH5v8QdeZQYS/exec?token=ss123end'+area
-requests.get(url)
+ret=requests.get(url).text
+print("伺服器復位訊息:",ret)
 import os
 import json
 print("等待地震報告中..")
@@ -84,7 +85,8 @@ for i in recieve:
     bot.sendMessage(i,message)
     print ('發送成功!')
 url='https://script.google.com/macros/s/AKfycbws1z7qKfn834vOqQWKi5Z31U7zrwyQo42BsEScE9doYia15SlHIf82aH5v8QdeZQYS/exec?token=ss123repend'
-requests.get(url)
+ret=requests.get(url).text
+print("伺服器復位訊息:",ret)
 print('\n')
 os.system('taskkill /f /im chromedriver.exe')
 print('--地震預警訊息發送完畢--')

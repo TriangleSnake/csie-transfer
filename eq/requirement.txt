@@ -1,0 +1,5 @@
+telepot
+requests
+datetime
+jsonlib
+threaded
