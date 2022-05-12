@@ -1,0 +1,5 @@
+pillow
+tk
+requests
+threaded
+pyautogui

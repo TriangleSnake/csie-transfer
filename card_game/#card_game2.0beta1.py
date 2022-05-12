@@ -112,6 +112,9 @@ def check():
         return ret
     choosed_type=checktype(choosed)
     current_card_type=checktype(eval(current_card))
+    if pAss==1 and current_card=='':
+        return True
+        
     if ('p3' in choosed) and choosed_type[0]!=0:
         return True
     if choosed_type[0]==0:
@@ -134,7 +137,7 @@ def check():
     return ret
 
 def checktype(lst):
-    mx=-1
+    mx=str(-1)
     lst.sort()
     number=[]
     suit=[]
@@ -169,8 +172,10 @@ def checktype(lst):
                 else :
                     ret=7
                 for i in lst:
-                    if number[4] in i:
+                    if str(number[4]) in i:
                         mx=i
+    if eval(mx[1:]) <= 2:
+        mx=mx[0]+str(eval(mx[1:])+13)
     return ret,mx
 def preview(loc, lst):
     global img
@@ -186,11 +191,13 @@ def show_current_card(lst):
         img_c.append(ImageTk.PhotoImage(img_pil))
     for i in range(len(img_c)):
         canvas.create_image((screen_width*11//13)/2-(len(img_c)/2-i)*card_width,screen_height*3//10,image=img_c[i],anchor='nw',tags="current_"+lst[i])
+pAss=0
 
 img = []
 def Pass():
-    global current_card,room_name,name
-    requests.get(url+"?send=1&room="+room_name+"&name="+name+"&card="+current_card)
+    global current_card,room_name,name,pAss
+    pAss=1
+    requests.get(url+"?send=1&pass=1&room="+room_name+"&name="+name+"&card="+current_card)
 current_card=[]
 r=''
 def refwait():
