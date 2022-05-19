@@ -70,6 +70,8 @@ def join_room():
 def send():
     global choosed,card
     requests.get(url+"?send=1&room="+room_name+"&name="+name+"&card="+str(choosed))
+    requests.get(url+"?room="+room_name+"&name="+name+"&card_num="+str(len(card)))
+
     for i in choosed:
         card.remove(i)
     choosed=[]
@@ -90,7 +92,8 @@ choosed = []
 
 
 def choose(card, lst, loc):
-    global choosed
+    global choosed,current_card
+    
     if card in choosed:
         canvas.delete(lst[loc])
         canvas.create_image(10+loc*(card_width-20), screen_height*7//10,
@@ -111,10 +114,13 @@ def check():
     if choosed==[]:
         return ret
     choosed_type=checktype(choosed)
-    current_card_type=checktype(eval(current_card))
-    if pAss==1 and current_card=='':
+    
+    if eval(current_card)==['P'] and choosed_type[0]!=0:
         return True
-        
+    elif eval(current_card)==['P'] and choosed_type[0]==0:
+        return False
+    else:
+        current_card_type=checktype(eval(current_card))
     if ('p3' in choosed) and choosed_type[0]!=0:
         return True
     if choosed_type[0]==0:
@@ -183,20 +189,45 @@ def preview(loc, lst):
     canvas.create_image(10+loc*(card_width-20), screen_height*7//10,
                         image=img[loc], anchor='nw', tags=lst[loc])
 img_c=[]
+
+def show_player_status():
+    print(123)
+    global r
+    player_lst=[]
+    player_lst.append(r['player1'])
+    player_lst.append(r['player2'])
+    player_lst.append(r['player3'])
+    player_lst.append(r['player4'])
+    print(player_lst)
+    img1=Image.open('fold.png')
+    img1=img1.resize((70,103))
+    img1=ImageTk.PhotoImage(img1)
+    canhei=1
+    canwid=1
+    for i in range(len(player_lst)):
+        canvas1.create_text(100,0,justify="left",text=player_lst[i]["name"],anchor='nw',tags=player_lst[i]["name"])
+        for j in range(eval(player_lst[i]["number"])):
+            canvas1.create_image(10,0,image=img1,anchor='nw')
+    canvas1.place(x=screen_width*11//13+2,y=0)
+    window.update()
+
 def show_current_card(lst):
+    show_player_status()
     global img_c
     img_c=[]
+    if lst==['P']:
+        return 0
     for i in lst:
         img_pil = Image.open(str(i)+'.png')
         img_c.append(ImageTk.PhotoImage(img_pil))
     for i in range(len(img_c)):
         canvas.create_image((screen_width*11//13)/2-(len(img_c)/2-i)*card_width,screen_height*3//10,image=img_c[i],anchor='nw',tags="current_"+lst[i])
-pAss=0
+    
+    
 
 img = []
 def Pass():
-    global current_card,room_name,name,pAss
-    pAss=1
+    global current_card,room_name,name
     requests.get(url+"?send=1&pass=1&room="+room_name+"&name="+name+"&card="+current_card)
 current_card=[]
 r=''
@@ -205,8 +236,9 @@ def refwait():
     r=eval(requests.get(url+"?name="+name+"&room="+room_name+"&wait=1").text)
     
 def show_card(lst):
-    global r
     global img, choosed,name,room_name,current_card
+    requests.get(url+"?room="+room_name+"&name="+name+"&card_num="+str(len(card)))
+    global r
     hidemenu()
     img = []
     for i in lst:
@@ -215,13 +247,18 @@ def show_card(lst):
     for i in range(len(lst)):
         canvas.create_image(10+i*(card_width-20), screen_height*8//10,
                             image=img[i], anchor='nw', tags=lst[i])
+    canvas1.place(x=screen_width*11//13+2,y=0)
     canvas.place(x=0, y=0)
+    
     last = 0
     t=int(time.time())
     r=eval(requests.get(url+"?name="+name+"&room="+room_name+"&wait=1").text)
     current_card=r['card']
     show_current_card(eval(current_card))
+    show_player_status()
     bt_send.configure(state="disabled",bg='red')
+    if eval(current_card)==['P']:
+        bt_pass.configure(state="disabled",bg="red")
     while True:
         window.update()
         mouse_x, mouse_y = pyautogui.position()
@@ -269,8 +306,9 @@ def start_game():
             for j in range(1, 14):
                 card.append(i+str(j))
         random.shuffle(card)
-        r = eval(requests.get(url+"?create_room="+room_name +
-                 "&name="+name+"&card="+str(card)).text)
+        r = requests.get(url+"?create_room="+room_name +
+                 "&name="+name+"&card="+str(card))
+        r=eval(r.text)
         card = r['card']
     elif r['is_exist'] == "true":
         errormsg("Joined!")
@@ -339,5 +377,6 @@ bt_pass=tk.Button(window, width=10, height=10,
 text_turn= tk.Label(div_menu, text="It's not your turn", bg="black",
                        fg="white", bd=0, font=("Arial", 18))
 bt_send.configure(state="disabled",bg='red')
+canvas1=tk.Canvas(window,width=screen_width*2//13,height=screen_height*3//4,bg='black',bd=0)
 menu()
 window.mainloop()
