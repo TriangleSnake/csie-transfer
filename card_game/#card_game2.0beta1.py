@@ -191,26 +191,56 @@ def preview(loc, lst):
 img_c=[]
 
 def show_player_status():
-    print(123)
     global r
-    player_lst=[]
-    player_lst.append(r['player1'])
-    player_lst.append(r['player2'])
-    player_lst.append(r['player3'])
-    player_lst.append(r['player4'])
-    print(player_lst)
-    img1=Image.open('fold.png')
-    img1=img1.resize((70,103))
-    img1=ImageTk.PhotoImage(img1)
-    canhei=1
-    canwid=1
-    for i in range(len(player_lst)):
-        canvas1.create_text(100,0,justify="left",text=player_lst[i]["name"],anchor='nw',tags=player_lst[i]["name"])
-        for j in range(eval(player_lst[i]["number"])):
-            canvas1.create_image(10,0,image=img1,anchor='nw')
-    canvas1.place(x=screen_width*11//13+2,y=0)
+    status_width=20
+    status_height=2
+    player_width=screen_width*11//13+10
+    player1=tk.Label(window,bg='red',fg='white',text=r['player1']['name'],anchor='nw',bd=2)
+    c_1=tk.Canvas(window,width=screen_width*2//13-5,height=70,bg='black')
+    for i in range(eval(r['player1']['number'])):
+        c_1.create_image(20+i*20,35,image=img_p,tags='c')
+    c_1.place(x=player_width-8,y=120)
+    player1.place(x=player_width,y=100)
+    player2=tk.Label(window,bg="red",fg='white',text=r['player2']['name'],anchor='nw',bd=2)
+    c_2=tk.Canvas(window,width=screen_width*2//13-5,height=70,bg='black')
+    for i in range(eval(r['player2']['number'])):
+        c_2.create_image(20+i*20,35,image=img_p,tags='c')
+    c_2.place(x=player_width-8,y=220)
+    player2.place(x=player_width,y=200)
+    player3=tk.Label(window,bg="red",fg='white',text=r['player3']['name'],anchor='nw',bd=2)
+    c_3=tk.Canvas(window,width=screen_width*2//13-5,height=70,bg='black')
+    for i in range(eval(r['player3']['number'])):
+        c_3.create_image(20+i*20,35,image=img_p,tags='c')
+    c_3.place(x=player_width-8,y=320)
+    player3.place(x=player_width,y=300)
+    player4=tk.Label(window,bg="red",fg='white',text=r['player4']['name'],anchor='nw',bd=2)
+    c_4=tk.Canvas(window,width=screen_width*2//13-5,height=70,bg='black')
+    for i in range(eval(r['player4']['number'])):
+        c_4.create_image(20+i*20,35,image=img_p,tags='c')
+    c_4.place(x=player_width-8,y=420)
+    player4.place(x=player_width,y=400)
+    '''player1['text']='waiting player join'
+    player2['text']='waiting player join'
+    player3['text']='waiting player join'
+    player4['text']='waiting player join'
+    if r['player1']['name']!='':
+        player1['text']=r['player1']['name']
+    if r['player2']['name']!='':
+        player2['text']=r['player2']['name']
+    if r['player3']['name']!='':
+        player3['text']=r['player3']['name']
+    if r['player4']['name']!='':
+        player4['text']=r['player4']['name']'''
     window.update()
-
+    turn=r['turn']
+    if turn==r['player1']['name']:
+        player1.configure(bg='green')
+    elif turn==r['player2']['name']:
+        player2.configure(bg='green')
+    elif turn==r['player3']['name']:
+        player3.configure(bg='green')
+    elif turn==r['player4']['name']:
+        player4.configure(bg='green')
 def show_current_card(lst):
     show_player_status()
     global img_c
@@ -234,7 +264,7 @@ r=''
 def refwait():
     global r
     r=eval(requests.get(url+"?name="+name+"&room="+room_name+"&wait=1").text)
-    
+    show_player_status()
 def show_card(lst):
     global img, choosed,name,room_name,current_card
     requests.get(url+"?room="+room_name+"&name="+name+"&card_num="+str(len(card)))
@@ -247,7 +277,6 @@ def show_card(lst):
     for i in range(len(lst)):
         canvas.create_image(10+i*(card_width-20), screen_height*8//10,
                             image=img[i], anchor='nw', tags=lst[i])
-    canvas1.place(x=screen_width*11//13+2,y=0)
     canvas.place(x=0, y=0)
     
     last = 0
@@ -255,7 +284,7 @@ def show_card(lst):
     r=eval(requests.get(url+"?name="+name+"&room="+room_name+"&wait=1").text)
     current_card=r['card']
     show_current_card(eval(current_card))
-    show_player_status()
+    
     bt_send.configure(state="disabled",bg='red')
     if eval(current_card)==['P']:
         bt_pass.configure(state="disabled",bg="red")
@@ -335,7 +364,7 @@ window.attributes('-fullscreen', True)
 window.configure(bg="black")
 
 window.title("大老二")
-title_menu = tk.Label(window, text="Deuces2.0",
+title_menu = tk.Label(window, text="Deuces2.0beta",
                       background="white", font=('Arial', 40))
 screen_width = window.winfo_screenwidth()
 screen_height = window.winfo_screenheight()
@@ -362,8 +391,6 @@ bt_join_room = tk.Button(div_menu, width=menu_button_width, height=menu_button_h
 text_option = tk.Label(div_menu, text="You have no option but to go back", bg="black",
                        fg="white", bd=0, font=("Arial", 18))
 text_console = tk.Entry(div_menu, width=menu_button_width, justify="center")
-canvas = tk.Canvas(window, width=screen_width, height=screen_height,
-                   bg="black", borderwidth=0)
 bt_send = tk.Button(window, width=10, height=10,
                     text='SEND', bg='green', fg='white', command=send)
 text_room_name = tk.Label(div_menu, text="Room name", bg="black",
@@ -377,6 +404,9 @@ bt_pass=tk.Button(window, width=10, height=10,
 text_turn= tk.Label(div_menu, text="It's not your turn", bg="black",
                        fg="white", bd=0, font=("Arial", 18))
 bt_send.configure(state="disabled",bg='red')
-canvas1=tk.Canvas(window,width=screen_width*2//13,height=screen_height*3//4,bg='black',bd=0)
+
+img_p_o=Image.open('fold.png')
+img_p_o=img_p_o.resize((21,30))
+img_p=ImageTk.PhotoImage(img_p_o)
 menu()
 window.mainloop()
