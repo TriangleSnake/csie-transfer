@@ -60,8 +60,8 @@ print("伺服器復位訊息:",ret)
 import os
 import json
 print("等待地震報告中..")
-for i in range(300):
-    print("\r"+str(300-i)+"秒後取得地震報告",end='')
+for i in range(480):
+    print("\r"+str(480-i)+"秒後取得地震報告",end='')
     time.sleep(1)
 url='https://script.google.com/macros/s/AKfycbws1z7qKfn834vOqQWKi5Z31U7zrwyQo42BsEScE9doYia15SlHIf82aH5v8QdeZQYS/exec?token=ss123rep'
 if requests.get(url).text=='-1':

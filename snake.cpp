@@ -40,18 +40,18 @@ void menu(){
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE),pos);
 			string icon=
 "\
-¡½   .oooooo..o ooooo      ooo       .o.       oooo    oooo oooooooooooo \n\
-¡½  d8P'    `Y8 `888b.     `8'      .888.      `888   .8P'  `888'     `8 \n\
-¡½  Y88bo.       8 `88b.    8      .8\"888.      888  d8'     888        \n\
-¡½   `\"Y8888o.   8   `88b.  8     .8' `888.     88888[       888oooo8   \n\
-¡½       `\"Y88b  8     `88b.8    .88ooo8888.    888`88b.     888    \"   \n\
-¡½  oo     .d8P  8       `888   .8'     `888.   888  `88b.   888       o\n\
-¡½  8\"\"88888P'  o8o        `8  o88o     o8888o o888o  o888o o888ooooood8\
+ï¿½ï¿½   .oooooo..o ooooo      ooo       .o.       oooo    oooo oooooooooooo \n\
+ï¿½ï¿½  d8P'    `Y8 `888b.     `8'      .888.      `888   .8P'  `888'     `8 \n\
+ï¿½ï¿½  Y88bo.       8 `88b.    8      .8\"888.      888  d8'     888        \n\
+ï¿½ï¿½   `\"Y8888o.   8   `88b.  8     .8' `888.     88888[       888oooo8   \n\
+ï¿½ï¿½       `\"Y88b  8     `88b.8    .88ooo8888.    888`88b.     888    \"   \n\
+ï¿½ï¿½  oo     .d8P  8       `888   .8'     `888.   888  `88b.   888       o\n\
+ï¿½ï¿½  8\"\"88888P'  o8o        `8  o88o     o8888o o888o  o888o o888ooooood8\
 ";
 	while (1){
 		SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE),pos);
 		cout <<icon <<endl;
-		cout <<"¡½- - - - - - - - - - - - press  ANY  key  to  START - - - - - - - - - - -";
+		cout <<"ï¿½ï¿½- - - - - - - - - - - - press  ANY  key  to  START - - - - - - - - - - -";
 		Sleep(1000);
 		show();
 		Sleep(1000-speed);
@@ -114,9 +114,9 @@ void update(){
 		for (int j=1;j<size-1;j++) screen[i][j]="  ";
 	}
 	screen[apple.y][apple.x]="O ";
-	screen[snake[0].y][snake[0].x]="¡½";
+	screen[snake[0].y][snake[0].x]="ï¿½ï¿½";
 	for (int i=1;i<=lng;i++){
-		screen[snake[i].y][snake[i].x]="¡½";
+		screen[snake[i].y][snake[i].x]="ï¿½ï¿½";
 		if (apple.x==snake[i].x&&apple.y==snake[i].y){
 			food();
 		}
@@ -127,8 +127,6 @@ void update(){
 int main(){
 	keybd_event(16,0,0,0);
 	keybd_event(16,0,KEYEVENTF_KEYUP,0);
-	keybd_event(122,0,0,0);
-	keybd_event(122,0,KEYEVENTF_KEYUP,0);
 	HideCursor();
 	int cmd=int('d');
 	tmp.x=size/2;
@@ -140,7 +138,7 @@ int main(){
 	snake.push_back(tmp);
 	for (int i=0;i<size;i++){
 		for (int j=0;j<size;j++){
-			if (i==0||i==size-1||j==0||j==size-1) screen[i][j]="¡½";
+			if (i==0||i==size-1||j==0||j==size-1) screen[i][j]="ï¿½ï¿½";
 			else screen[i][j]="  ";
 			cout <<screen[i][j];
 		}

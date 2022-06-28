@@ -6,6 +6,8 @@ import random
 import tkinter as tk
 import time
 import threading
+'''socket卡住果斷放棄
+'''
 window = tk.Tk()
 window.attributes('-fullscreen', True)
 window.configure(bg="black")

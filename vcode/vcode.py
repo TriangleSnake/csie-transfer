@@ -19,7 +19,6 @@ os.system('start StartChrome.cmd')
 url='https://course.ncku.edu.tw/index.php?c=auth'
 chrome_options = Options()
 chrome_options.add_experimental_option("debuggerAddress", "127.0.0.1:9222")
-chrome_driver = "chromedriver.exe"
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()),options=chrome_options)
 driver.get(url)
 
@@ -76,6 +75,7 @@ while 1:
                 if tmp<min:
                     min=tmp
                     mnNum=str(l)
+                    '''
                     for i in range(len(per_num[k])):#i=y
                         for j in range(len(per_num[k][0])-1):
                             if showimg[i][j]>150:
@@ -84,6 +84,7 @@ while 1:
                                 img[i][9+j+k*9]=[0,0,255]
                         cv2.imshow('img',cv2.resize(img,(len(img[0])*10,len(img)*10)))
                         cv2.waitKey(1)
+                    '''
             opt+=mnNum
             ele=driver.find_element(By.ID,'code')
             ele.send_keys(mnNum)
